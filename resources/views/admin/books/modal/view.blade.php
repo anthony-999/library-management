@@ -49,6 +49,11 @@
                     <p id="view-published_year" class="form-control-plaintext"></p>
                 </div>
 
+                  <div class="form-group">
+                    <label>Status</label>
+                    <p id="view-is_available" class="form-control-plaintext"></p>
+                </div>
+
                 <div class="form-group">
                     <label>Cover Page</label><br>
                     <img id="view-cover_page" src="" alt="Cover Image" class="img-fluid rounded d-block mx-auto"

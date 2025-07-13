@@ -343,6 +343,13 @@ return [
          
           
         ],
+         [
+            'text' => 'Borrowed',
+            'url' => 'borrowed',
+            'icon' => 'fas fa-book',
+         
+          
+        ],
         
     ],
 

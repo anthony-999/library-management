@@ -27,12 +27,13 @@
                 <thead class="table">
                     <tr>
                         <th style="width: 10%;">No.</th>
-                        <th style="width: 10%;">Category</th>
+                        {{-- <th style="width: 10%;">Category</th> --}}
                         {{-- <th style="width: 10%;">Cover Page</th> --}}
                         <th style="width: 10%;">Title</th>
                         <th style="width: 10%;">Author</th>
                         {{-- <th style="width: 10%;">ISBN</th> --}}
                         <th style="width: 10%;">Published</th>
+                           <th style="width: 10%;">Status</th>
                         <th style="width: 10%;">Action</th>
 
                     </tr>
@@ -41,7 +42,7 @@
                     @foreach ($books as $book)
                         <tr>
                             <td>{{ $book->id }}</td>
-                            <td>{{ $book->category->name }}</td>
+                            {{-- <td>{{ $book->category->name }}</td> --}}
                             {{-- <td>
                                 <img src="{{ asset('storage/' . $book->cover_page) }}" alt="Cover Page" width="30"
                                     class="rounded">
@@ -50,6 +51,8 @@
                             <td>{{ $book->author }}</td>
                             {{-- <td>{{ $book->isbn }}</td> --}}
                             <td>{{ $book->published_year }}</td>
+                             <td>{{ $book->is_available == 1 ? "Available" : "Not Available"}}</td>
+                             
                             <td>
                                 <div class="d-flex justify-content-center gap-2">
 
@@ -59,7 +62,9 @@
                                         data-name="{{ $book->name }}" data-author="{{ $book->author }}"
                                         data-isbn="{{ $book->isbn }}" data-description="{{ $book->description }}"
                                         data-cover_page="{{ asset('storage/' . $book->cover_page) }}"
-                                        data-published_year="{{ $book->published_year }}">
+                                        data-published_year="{{ $book->published_year }}"
+                                          data-is_available="{{ $book->is_available }}"
+                                        >
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     {{-- VIEW --}}
@@ -71,7 +76,8 @@
                                         data-author="{{ $book->author }}" data-isbn="{{ $book->isbn }}"
                                         data-description="{{ $book->description }}"
                                         data-cover_page="{{ $book->cover_page }}"
-                                        data-published_year="{{ $book->published_year }}"> <i class="fas fa-edit"></i></a>
+                                         data-published_year="{{ $book->published_year }}"
+                                        data-is_available="{{ $book->is_available }}"> <i class="fas fa-edit"></i></a>
 
                                     <form action="{{ route('books.destroy', $book->id) }}" method="post">
                                         @csrf @method('DELETE')
@@ -192,6 +198,10 @@
             const description = $(this).data('description');
             const cover_page = $(this).data('cover_page');
             const published_year = $(this).data('published_year');
+            const is_available = $(this).data('is_available');
+           
+            // Display as text instead of 1 or 0
+            const availabilityText = is_available == 1 ? 'Available' : 'Not Available';
 
             $('#view-category_id').text(category_id);
             $('#view-name').text(name);
@@ -199,7 +209,8 @@
             $('#view-isbn').text(isbn);
             $('#view-description').text(description);
             $('#view-cover_page').attr('src', cover_page);
-            $('#view-published_year').text(published_year);   
+            $('#view-published_year').text(published_year);  
+            $('#view-is_available').text(availabilityText);
 
         });
         // // VIEW MODAL DATA 
@@ -214,9 +225,11 @@
             const isbn = $(this).data('isbn');
             const description = $(this).data('description');
             const cover_page = $(this).data('cover_page');
+ const published_year = $(this).data('published_year');
+            const is_available = $(this).data('is_available');
 
-            const published_year = $(this).data('published_year');
-
+              // Display as text instead of 1 or 0
+           
 
             $('#edit-id').val(id);
             $('#edit-category_id').val(category_id);
@@ -226,6 +239,8 @@
             $('#edit-description').val(description);
             $('#edit-cover_page').attr('src', '/storage/' + cover_page);
             $('#edit-published_year').val(published_year);
+             $('#edit-is_available').val(is_available);
+
 
 
 

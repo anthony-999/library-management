@@ -19,6 +19,7 @@ class BookController extends Controller
             [
                 'categories' => Category::all(),
                 'books' => Book::latest()->paginate(5),
+                
 
             ]
 
@@ -48,6 +49,7 @@ class BookController extends Controller
             'description' => 'required',
             'cover_page' => 'required|image|mimes:png,jpg,jpeg|max:3000',
             'published_year' => 'required',
+            'is_available' => 'required',
 
         ]);
         //validate image file
@@ -91,8 +93,10 @@ class BookController extends Controller
             'isbn' => 'required',
             'description' => 'required',
             //cover page optional to upload new image but file is png etc...
-            'cover_page' => 'image|mimes:png,jpg,jpeg|max:3000',           
-             'published_year' => 'required',
+            'cover_page' => 'image|mimes:png,jpg,jpeg|max:3000',
+            'published_year' => 'required',
+            'is_available' => 'required',
+
         ]);
 
 
@@ -101,13 +105,13 @@ class BookController extends Controller
 
 
         //validate the image
-        if($request->hasFile('cover_page')){
+        if ($request->hasFile('cover_page')) {
             $validated['cover_page'] = $request->file('cover_page')->store('Books', 'public');
         }
 
         // update the category
         $books->update($validated);
-        
+
         // redirect to index
         return redirect()->route('books.index')->with('success', 'Book updated successfully!');
     }
@@ -124,7 +128,5 @@ class BookController extends Controller
 
         // redirect to index
         return redirect()->route('books.index')->with('success', 'Book deleted successfully!');
-
-
     }
 }

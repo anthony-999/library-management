@@ -62,12 +62,6 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label>Cover Page</label>
-                        <input type="file" name="cover_page" class="form-control">
-                        <img src="" alt="Current Image" class="img-fluid rounded my-2  mx-auto d-block"
-                            width="100" id="edit-cover_page">
-                    </div>
 
                     <div class="form-group">
                         <label>Published Year</label>
@@ -77,7 +71,22 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+                    
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="is_available" class="form-control" id="edit-is_available">
+                            <option value="1">Available</option>
+                            <option value="0">Not Available</option>
+                        </select>
+                    </div>
 
+                    
+                    <div class="form-group">
+                        <label>Cover Page</label>
+                        <input type="file" name="cover_page" class="form-control">
+                        <img src="" alt="Current Image" class="img-fluid rounded my-2  mx-auto d-block"
+                            width="100" id="edit-cover_page">
+                    </div>
 
 
                 </div>

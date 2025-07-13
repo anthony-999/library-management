@@ -52,6 +52,32 @@
                         @enderror
                     </div>
 
+
+                     <div class="form-group">
+                        <label>Published Year</label>
+                        <input type="number" class="form-control" name="published_year" min="1000" max="9999"
+                            maxlength="4" value="{{ old('published_year') }}" placeholder="e.g. 2024">
+                        @error('published_year')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                 
+                   <div class="form-group">
+                        <label>Status</label>
+                        <select name="is_available" class="form-control">
+                          
+                                <option value="1">Available</option>
+                                <option value="0">Not Available</option>
+
+                           
+                        </select>
+                    </div> 
+
+                     
+              
+
                     <div class="form-group">
                         <label>Cover Page</label>
                         <div class="input-group">
@@ -65,15 +91,7 @@
                     </div>
 
 
-                    <div class="form-group">
-                        <label>Published Year</label>
-                        <input type="number" class="form-control" name="published_year" min="1000" max="9999"
-                            maxlength="4" value="{{ old('published_year') }}"  placeholder="e.g. 2024">
-                        @error('published_year')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
-
+                  
 
                 </div>
                 <div class="modal-footer">

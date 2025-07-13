@@ -17,6 +17,7 @@ class Book extends Model
         'description',
         'cover_page',
         'published_year',
+         'is_available',
     ];
 
     //connection for category
