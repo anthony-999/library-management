@@ -7,14 +7,6 @@
             </div>
             <div class="modal-body">
 
-            {{-- $('#view-category_id').text(category_id);
-            $('#view-name').text(name);
-            $('#view-author').text(author);
-            $('#view-isbn').text(isbn);
-            $('#view-description').text(description);
-            $('#view-cover_page').attr('src', image);
-            $('#view-published_year').text(published_year); --}}
-        
 
                  <div class="form-group">
                     <label>Category</label>

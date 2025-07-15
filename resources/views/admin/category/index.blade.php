@@ -168,7 +168,7 @@
     <!-- Auto-open modal on validation error -->
 
 
-   
+
     <script>
         // VIEW MODAL DATA 
         $('.btn-view').on('click', function() {
@@ -197,9 +197,9 @@
 
             // set form action dynamically
             $('#edit-form').attr('action', '/categories/' + id);
-           
+
         });
-         // EDIT MODAL DATA 
+        // EDIT MODAL DATA 
     </script>
 
 

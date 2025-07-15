@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Borrowed;
+use App\Models\Book;
+
 use Illuminate\Http\Request;
 
 class BorrowedController extends Controller
@@ -13,13 +15,13 @@ class BorrowedController extends Controller
     public function index()
     {
         //
-         return view(
+        return view(
             'admin.borrowed.index',
             [
-                'borroweds' =>  Borrowed::latest()->paginate(5),
+               'borroweds' => Borrowed::with(['book', 'user'])->latest()->paginate(5),
+        'books' => Book::all(),
             ]
         );
-       
     }
 
     /**
@@ -35,7 +37,24 @@ class BorrowedController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validate the request
+
+      
+
+        $validated = $request->validate([
+
+            'book_id'        => 'required|exists:books,id',
+            'student_number' => 'required|exists:users,student_number',
+            'borrow_date'    => 'required|date',
+            'due_date'       => 'required|date|after_or_equal:borrow_date',
+            'status'         => 'required|in:borrowed,returned,overdue',
+        ]);
+
+        //create validated
+        Borrowed::create($validated);
+
+        //flash message
+        return redirect()->route('borrowed.index')->with('success', 'Borrowed added successfully');
     }
 
     /**
@@ -65,8 +84,15 @@ class BorrowedController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Borrowed $borrowed)
+    public function destroy(string $id)
     {
-        //
+        //find specific id
+        $deleted = Borrowed::findOrFail($id);
+        $deleted->delete();
+         //flash message
+        return redirect()->route('borrowed.index')->with('success', 'Borrowed deleted successfully');
+
+
+        
     }
 }

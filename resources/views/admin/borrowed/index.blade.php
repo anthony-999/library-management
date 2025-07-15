@@ -29,12 +29,12 @@
                     <tr>
                         <th style="width: 10%;">No.</th>
                         <th style="width: 10%;">Books</th>
-                        <th style="width: 10%;">Users</th>
+                        <th style="width: 10%;">Student No.</th>
                         <th style="width: 10%;">Borrowed Date</th>
                         <th style="width: 10%;">Due Date</th>
-                        <th style="width: 10%;">Return Date</th>
+                        {{-- <th style="width: 10%;">Return Date</th> --}}
                         <th style="width: 10%;">Status</th>
-                          <th style="width: 10%;">Action</th>
+                        <th style="width: 10%;">Action</th>
 
 
 
@@ -46,11 +46,46 @@
                         <tr>
                             <td>{{ $borrowed->id }}</td>
                             <td>{{ $borrowed->book->name }}</td>
-                            <td>{{ Str::ucfirst( $borrowed->user->name )}}</td>
+                            <td>{{ $borrowed->user?->student_number ?? 'N/A' }}</td>
                             <td>{{ \Carbon\Carbon::parse($borrowed->borrow_date)->format('F d, Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($borrowed->due_date)->format('F d, Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($borrowed->return_date)->format('F d, Y') }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($borrowed->return_date)->format('F d, Y') }}</td> --}}
                             <td>{{ Str::ucfirst($borrowed->status) }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+                                    {{-- VIEW --}}
+                                    <a href="#" class="btn btn-warning mx-2 btn-view" data-toggle="modal"
+                                        data-target="#ModalView" data-name="{{ $borrowed->book->name }}"
+                                        data-student_number="{{ $borrowed->user->student_number }}"
+                                        data-borrow_date="{{ $borrowed->borrow_date }}"
+                                        data-due_date="{{ $borrowed->due_date }}"
+                                        data-return_date="{{ $borrowed->return_date }}"
+                                        data-status="{{ $borrowed->status }}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {{-- VIEW --}}
+
+                                    {{-- EDIT --}}
+                                    {{-- <a href="#" class="btn btn-primary mx-2 btn-edit" data-toggle="modal"
+                                        data-target="#ModalEdit" data-id="{{ $category->id }}"
+                                        data-name="{{ $category->name }}" data-description="{{ $category->description }}"
+                                        data-image="{{ asset('storage/' . $category->cover_page) }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a> --}}
+                                    {{-- EDIT --}}
+
+                                    {{-- DELETE --}}
+                                    <form action="{{ route('borrowed.destroy', $borrowed->id) }}" method="post">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn-delete btn btn-danger mx-2"> <i
+                                                class="fas fa-trash"></i></button>
+                                    </form>
+                                    {{-- DELETE --}}
+
+                                </div>
+
+
+                            </td>
                         </tr>
                     @endforeach
 
@@ -67,9 +102,9 @@
     </div>
 
     {{--  MODAL PATH --}}
-     @include('admin.borrowed.modal.create')
-    {{--@include('admin.category.modal.view')
-    @include('admin.category.modal.edit') --}}
+    @include('admin.borrowed.modal.create')
+    @include('admin.borrowed.modal.view')
+    {{-- @include('admin.category.modal.edit') --}}
     {{-- MODAL PATH --}}
 
 
@@ -89,7 +124,7 @@
 
 
 
-   
+
     <script>
         // Toastr flash messages
         @if (session('success'))
@@ -134,7 +169,7 @@
 
     <!-- Auto-open modal on validation error -->
     <script>
-         @if ($errors->any())
+        @if ($errors->any())
             $(document).ready(function() {
                 $('#ModalCreate').modal('show');
             });
@@ -142,40 +177,68 @@
     </script>
     <!-- Auto-open modal on validation error -->
 
- {{-- 
-   
+
+
     <script>
-    //     // VIEW MODAL DATA 
-    //     $('.btn-view').on('click', function() {
-    //         const name = $(this).data('name');
-    //         const description = $(this).data('description');
-    //         const image = $(this).data('image');
+        // data - name = "{{ $borrowed->book->name }}"
+        // data - student_number = "{{ $borrowed->user->student_number }}"
+        // data - borrow_date = "{{ $borrowed->borrow_date }}"
+        // data - due_date = "{{ $borrowed->due_date }}"
+        // data - return_date = "{{ $borrowed->return_date }}"
+        // data - status = "{{ $borrowed->status }}"
 
-    //         $('#view-name').text(name);
-    //         $('#view-description').text(description);
-    //         $('#view-image').attr('src', image);
-    //     });
-    //     // VIEW MODAL DATA 
+       function formatDatePH(dateString) {
+    if (!dateString) {
+        return 'N/A';
+    }
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-PH', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+}
+
+        // VIEW MODAL DATA 
+        $('.btn-view').on('click', function() {
+            const name = $(this).data('name');
+            const student_number = $(this).data('student_number');
+            const borrow_date = $(this).data('borrow_date');
+            const due_date = $(this).data('due_date');
+            const return_date = $(this).data('return_date');
+            const status = $(this).data('status');
+
+            $('#view-name').text(name);
+            $('#view-student_number').text(student_number);
+          $('#view-borrow_date').text(formatDatePH(borrow_date));
+$('#view-due_date').text(formatDatePH(due_date));
+$('#view-return_date').text(formatDatePH(return_date));
+$('#view-status').text(status.charAt(0).toUpperCase() + status.slice(1).toLowerCase());
 
 
-    //     // EDIT MODAL DATA 
-    //     $('.btn-edit').on('click', function() {
-    //         const id = $(this).data('id');
-    //         const name = $(this).data('name');
-    //         const description = $(this).data('description');
-    //         const image = $(this).data('image');
+        });
+        // VIEW MODAL DATA 
 
-    //         $('#edit-id').val(id);
-    //         $('#edit-name').val(name);
-    //         $('#edit-description').val(description);
-    //         $('#edit-image').attr('src', image);
 
-    //         // set form action dynamically
-    //         $('#edit-form').attr('action', '/categories/' + id);
-           
-    //     });
-    //      // EDIT MODAL DATA 
-    // </script> --}}
+        //     // EDIT MODAL DATA 
+        //     $('.btn-edit').on('click', function() {
+        //         const id = $(this).data('id');
+        //         const name = $(this).data('name');
+        //         const description = $(this).data('description');
+        //         const image = $(this).data('image');
+
+        //         $('#edit-id').val(id);
+        //         $('#edit-name').val(name);
+        //         $('#edit-description').val(description);
+        //         $('#edit-image').attr('src', image);
+
+        //         // set form action dynamically
+        //         $('#edit-form').attr('action', '/categories/' + id);
+
+        //     });
+        //      // EDIT MODAL DATA 
+        // 
+    </script>
 
 
 
