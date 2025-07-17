@@ -18,7 +18,7 @@
 
 
                  <div class="form-group">
-                    <label>Name</label>
+                    <label>Books</label>
                     <p id="view-name" class="form-control-plaintext"></p>
                 </div>
 
@@ -42,12 +42,12 @@
                 </div>
 
 
-                   @if ($borrowed->status == 'returned')
+             
                     <div class="form-group">
                     <label>Return Date</label>
                     <p id="view-return_date" class="form-control-plaintext"></p>
                 </div>
-                @endif
+           
                    
 
                   <div class="form-group">

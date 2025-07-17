@@ -112,7 +112,7 @@ class BookController extends Controller
         // update the category
         $books->update($validated);
 
-        // redirect to index
+        // flash msg & redirect to index
         return redirect()->route('books.index')->with('success', 'Book updated successfully!');
     }
 

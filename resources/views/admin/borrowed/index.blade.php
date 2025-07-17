@@ -31,8 +31,8 @@
                         <th style="width: 10%;">Books</th>
                         <th style="width: 10%;">Student No.</th>
                         <th style="width: 10%;">Borrowed Date</th>
-                        <th style="width: 10%;">Due Date</th>
-                        {{-- <th style="width: 10%;">Return Date</th> --}}
+                        {{-- <th style="width: 10%;">Due Date</th> --}}
+                        <th style="width: 10%;">Return Date</th>
                         <th style="width: 10%;">Status</th>
                         <th style="width: 10%;">Action</th>
 
@@ -42,49 +42,67 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($borroweds as $borrowed)
+                    @foreach ($borroweds as $userId => $records)
+                        @php
+                            $user = $records->first()->user;
+                            $borrowed = $records->first(); // for date/status display only
+                        @endphp
                         <tr>
                             <td>{{ $borrowed->id }}</td>
-                            <td>{{ $borrowed->book->name }}</td>
-                            <td>{{ $borrowed->user?->student_number ?? 'N/A' }}</td>
+
+                            {{-- ✅ Loop Only the Book Names --}}
+                            <td>
+                                @foreach ($records as $record)
+                                    {{ $record->book->name }}@if (!$loop->last)
+                                        ,
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>{{ $user->student_number ?? 'N/A' }}</td>
                             <td>{{ \Carbon\Carbon::parse($borrowed->borrow_date)->format('F d, Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($borrowed->due_date)->format('F d, Y') }}</td>
-                            {{-- <td>{{ \Carbon\Carbon::parse($borrowed->return_date)->format('F d, Y') }}</td> --}}
-                            <td>{{ Str::ucfirst($borrowed->status) }}</td>
+                            {{-- <td>{{ \Carbon\Carbon::parse($borrowed->due_date)->format('F d, Y') }}</td> --}}
+                            <td>{{ $borrowed->return_date ? \Carbon\Carbon::parse($borrowed->return_date)->format('F d, Y') : 'N/A' }}
+                            </td>
+
+                            <td>{{ ucfirst($borrowed->status) }}</td>
+
                             <td>
                                 <div class="d-flex justify-content-center gap-2">
-                                    {{-- VIEW --}}
                                     <a href="#" class="btn btn-warning mx-2 btn-view" data-toggle="modal"
-                                        data-target="#ModalView" data-name="{{ $borrowed->book->name }}"
-                                        data-student_number="{{ $borrowed->user->student_number }}"
+                                        data-target="#ModalView"
+                                        data-name="{{ $records->pluck('book.name')->implode(', ') }}"
+                                        data-student_number="{{ $user->student_number }}"
                                         data-borrow_date="{{ $borrowed->borrow_date }}"
                                         data-due_date="{{ $borrowed->due_date }}"
                                         data-return_date="{{ $borrowed->return_date }}"
                                         data-status="{{ $borrowed->status }}">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    {{-- VIEW --}}
 
-                                    {{-- EDIT --}}
-                                    {{-- <a href="#" class="btn btn-primary mx-2 btn-edit" data-toggle="modal"
-                                        data-target="#ModalEdit" data-id="{{ $category->id }}"
-                                        data-name="{{ $category->name }}" data-description="{{ $category->description }}"
-                                        data-image="{{ asset('storage/' . $category->cover_page) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a> --}}
-                                    {{-- EDIT --}}
+                                    <a href="#" class="btn-edit btn btn-primary mx-2" data-toggle="modal"
+                                        data-target="#ModalEdit" data-id="{{ $borrowed->id }}"
+                                          data-name="{{ $borrowed->name }}"
 
-                                    {{-- DELETE --}}
+                                        data-book_ids='@json($records->pluck('book.id'))'
+                                        data-student_number="{{ $user->student_number }}"
+                                        data-borrow_date="{{ \Carbon\Carbon::parse($borrowed->borrow_date)->format('Y-m-d') }}"
+                                        data-due_date="{{ \Carbon\Carbon::parse($borrowed->due_date)->format('Y-m-d') }}"
+                                        data-return_date="{{ $borrowed->return_date ? \Carbon\Carbon::parse($borrowed->return_date)->format('Y-m-d') : '' }}"
+                                        
+                                        data-status="{{ $borrowed->status }}"
+                                      >
+                                        
+
+                                        <i class="fas fa-edit"></i></a>
+
                                     <form action="{{ route('borrowed.destroy', $borrowed->id) }}" method="post">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="btn-delete btn btn-danger mx-2"> <i
-                                                class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn-delete btn btn-danger mx-2">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
-                                    {{-- DELETE --}}
-
                                 </div>
-
-
                             </td>
                         </tr>
                     @endforeach
@@ -95,7 +113,7 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">
-            {{-- <div class="float-right">{{ $categories->links() }}</div> --}}
+            {{-- <div class="float-right">{{ $borroweds->links() }}</div> --}}
 
 
         </div>
@@ -104,7 +122,7 @@
     {{--  MODAL PATH --}}
     @include('admin.borrowed.modal.create')
     @include('admin.borrowed.modal.view')
-    {{-- @include('admin.category.modal.edit') --}}
+    @include('admin.borrowed.modal.edit')
     {{-- MODAL PATH --}}
 
 
@@ -180,24 +198,17 @@
 
 
     <script>
-        // data - name = "{{ $borrowed->book->name }}"
-        // data - student_number = "{{ $borrowed->user->student_number }}"
-        // data - borrow_date = "{{ $borrowed->borrow_date }}"
-        // data - due_date = "{{ $borrowed->due_date }}"
-        // data - return_date = "{{ $borrowed->return_date }}"
-        // data - status = "{{ $borrowed->status }}"
-
-       function formatDatePH(dateString) {
-    if (!dateString) {
-        return 'N/A';
-    }
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-PH', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-}
+        function formatDatePH(dateString) {
+            if (!dateString) {
+                return 'N/A';
+            }
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-PH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
 
         // VIEW MODAL DATA 
         $('.btn-view').on('click', function() {
@@ -210,34 +221,58 @@
 
             $('#view-name').text(name);
             $('#view-student_number').text(student_number);
-          $('#view-borrow_date').text(formatDatePH(borrow_date));
-$('#view-due_date').text(formatDatePH(due_date));
-$('#view-return_date').text(formatDatePH(return_date));
-$('#view-status').text(status.charAt(0).toUpperCase() + status.slice(1).toLowerCase());
+            $('#view-borrow_date').text(formatDatePH(borrow_date));
+            $('#view-due_date').text(formatDatePH(due_date));
+            $('#view-return_date').text(formatDatePH(return_date));
+            $('#view-status').text(status.charAt(0).toUpperCase() + status.slice(1).toLowerCase());
 
 
         });
         // VIEW MODAL DATA 
 
 
-        //     // EDIT MODAL DATA 
-        //     $('.btn-edit').on('click', function() {
-        //         const id = $(this).data('id');
-        //         const name = $(this).data('name');
-        //         const description = $(this).data('description');
-        //         const image = $(this).data('image');
 
-        //         $('#edit-id').val(id);
-        //         $('#edit-name').val(name);
-        //         $('#edit-description').val(description);
-        //         $('#edit-image').attr('src', image);
+        // EDIT MODAL DATA 
+        $('.btn-edit').on('click', function() {
 
-        //         // set form action dynamically
-        //         $('#edit-form').attr('action', '/categories/' + id);
+           const bookIds = $(this).data('book_ids'); // array of selected book IDs
 
-        //     });
-        //      // EDIT MODAL DATA 
-        // 
+// Reset all selected options first
+$('#book-select option').prop('selected', false);
+
+// Then select the ones that match
+if (Array.isArray(bookIds)) {
+    bookIds.forEach(function (id) {
+        $('#book-select option[value="' + id + '"]').prop('selected', true);
+    });
+}
+
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const student_number = $(this).data('student_number');
+            const borrow_date = $(this).data('borrow_date');
+            const due_date = $(this).data('due_date');
+            const return_date = $(this).data('return_date');
+            const status = $(this).data('status');
+
+
+
+
+            $('#edit-id').val(id);
+            $('#edit-name').val(name);
+            $('#edit-student_number').val(student_number);
+            $('#edit-borrow_date').val(borrow_date);
+            $('#edit-due_date').val(due_date);
+            $('#edit-return_date').val(return_date);
+            $('#edit-status').val(status);
+
+
+
+            // set form action dynamically
+            $('#edit-form').attr('action', '/borrowed/' + id);
+
+        });
+        // EDIT MODAL DATA 
     </script>
 
 

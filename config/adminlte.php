@@ -350,6 +350,14 @@ return [
          
           
         ],
+       
+         [
+            'text' => 'Users',
+            'url' => 'users',
+            'icon' => 'fas fa-users',
+         
+          
+        ],
         
     ],
 

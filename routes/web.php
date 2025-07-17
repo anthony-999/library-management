@@ -13,19 +13,17 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 Auth::routes();
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/home', [UserController::class, 'index'])->name('dashboard');
-    Route::resource('categories', CategoryController::class);
-      Route::resource('books', BookController::class);
-        Route::resource('borrowed', BorrowedController::class);
+  Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
+  Route::resource('categories', CategoryController::class);
+  Route::resource('books', BookController::class);
+  Route::resource('borrowed', BorrowedController::class);
+  Route::resource('users', UserController::class);
+  Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
-   
 });
-
-
-
