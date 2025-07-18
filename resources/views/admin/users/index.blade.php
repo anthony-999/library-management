@@ -41,35 +41,35 @@
                             <td>{{ Str::title($user->name) }}</td>
 
                             <td>
-                                  <div class="d-flex justify-content-center gap-2"> 
-                                {{-- VIEW --}}
-                                <a href="#" class="btn btn-warning mx-2 btn-view" data-toggle="modal"
-                                    data-target="#ModalView" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                    data-student_number="{{ $user->student_number }}" data-email="{{ $user->email }}"
-                                    data-role="{{ $user->role }}">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                {{-- VIEW --}}
+                                <div class="d-flex justify-content-center gap-2">
+                                    {{-- VIEW --}}
+                                    <a href="#" class="btn btn-warning mx-2 btn-view" data-toggle="modal"
+                                        data-target="#ModalView" data-id="{{ $user->id }}"
+                                        data-name="{{ $user->name }}" data-student_number="{{ $user->student_number }}"
+                                        data-email="{{ $user->email }}" data-role="{{ $user->role }}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {{-- VIEW --}}
 
 
 
-                                {{-- EDIT --}}
-                                <a href="#" class="btn btn-primary mx-2 btn-edit" data-toggle="modal"
-                                    data-target="#ModalEdit" data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                    data-student_number="{{ $user->student_number }}" data-email="{{ $user->email }}"
-                                    data-role="{{ $user->role }}">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                {{-- EDIT --}}
+                                    {{-- EDIT --}}
+                                    <a href="#" class="btn btn-primary mx-2 btn-edit" data-toggle="modal"
+                                        data-target="#ModalEdit" data-id="{{ $user->id }}"
+                                        data-name="{{ $user->name }}" data-student_number="{{ $user->student_number }}"
+                                        data-email="{{ $user->email }}" data-role="{{ $user->role }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {{-- EDIT --}}
 
 
-                                {{-- DELETE --}}
-                                <form action="{{ route('users.destroy', $user->id) }}" method="post">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn-delete btn btn-danger mx-2"> <i
-                                            class="fas fa-trash"></i></button>
-                                </form>
-                                {{-- DELETE --}}
+                                    {{-- DELETE --}}
+                                    <form action="{{ route('users.destroy', $user->id) }}" method="post">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn-delete btn btn-danger mx-2"> <i
+                                                class="fas fa-trash"></i></button>
+                                    </form>
+                                    {{-- DELETE --}}
                                 </div>
 
 
@@ -96,6 +96,8 @@
     {{--  MODAL PATH --}}
     @include('admin.users.modal.view')
     @include('admin.users.modal.edit')
+    @include('admin.users.modal.create')
+
     {{-- MODAL PATH --}}
 
 
@@ -116,12 +118,15 @@
     <script>
         @if ($errors->any())
             $(document).ready(function() {
-              
-                $('#ModalEdit').modal('show');
+                $('#ModalCreate').modal('show');
+
+
             });
         @endif
     </script>
     <!-- Auto-open modal on validation error -->
+
+
 
 
 

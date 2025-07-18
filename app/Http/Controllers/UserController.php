@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\DB; // Make sure to import this at the top
-
-
+use Livewire\Attributes\Validate;
 
 class UserController extends Controller
 {
@@ -38,10 +37,10 @@ class UserController extends Controller
         // validate input
         $validated = $request->validate([
             'name' => 'required',
-            // 'student_number' => 'required|unique:users,student_number',
-            // 'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'password_confirmation' => 'required_with:password|same:password|min:6',
+            'student_number' => 'unique:users,student_number',
+            'email' => 'email|unique:users,email',
+            // 'password' => 'min:6',
+            'password_confirmation' => 'same:password',
             'role' => 'required',        
 
         ]);
@@ -55,6 +54,23 @@ class UserController extends Controller
          // flash msg & redirect to index
          return redirect()->route('users.index')->with('success', 'User updated successfully!');
 
+    }
 
+    public function store(Request $request){
+
+        //validate input 
+        $users = $request->validate([
+            'name' => 'required',
+            'student_number' => 'required|unique:users,student_number',
+            'email' => 'required|email|unique:users,email',
+             'password' => 'required|min:6|confirmed',
+            'role' => 'required',    
+        ]);
+
+        //create in db
+        User::create($users);
+
+        //redirect to index
+        return redirect()->route('users.index')->with('success', 'User added successfully!');
     }
 }

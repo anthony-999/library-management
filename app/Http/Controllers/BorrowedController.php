@@ -100,12 +100,12 @@ class BorrowedController extends Controller
     public function update(Request $request, string $id)
     {
 
-        
+
         //validate input
         $updateBorrowed = $request->validate([
-        //    'name'        => 'required|array',            
-        //     'name.*'      => 'required|exists:books,id',   
-        //     // 'student_number' => 'required|exists:users,student_number',
+            //    'name'        => 'required|array',            
+            //     'name.*'      => 'required|exists:books,id',   
+            //     // 'student_number' => 'required|exists:users,student_number',
             'borrow_date'    => 'required|date',
             'due_date'       => 'required|date|after_or_equal:borrow_date',
             'status'         => 'required|in:borrowed,returned,overdue',
@@ -129,10 +129,14 @@ class BorrowedController extends Controller
      */
     public function destroy(string $id)
     {
-        //find specific id
-        $deleted = Borrowed::findOrFail($id);
-        $deleted->delete();
-        //flash message
-        return redirect()->route('borrowed.index')->with('success', 'Borrowed deleted successfully');
+        // Find the specific borrowed entry
+        $borrow = Borrowed::findOrFail($id);
+
+        // Delete all entries with the exact same user and timestamp
+        Borrowed::where('user_id', $borrow->user_id)
+            ->where('created_at', $borrow->created_at)
+            ->delete();
+
+        return redirect()->route('borrowed.index')->with('success', 'Borrowed group deleted successfully.');
     }
 }
