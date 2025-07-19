@@ -115,7 +115,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <!-- Auto-open modal on validation error -->
-    <script>
+    {{-- <script>
         @if ($errors->any())
             $(document).ready(function() {
                 $('#ModalCreate').modal('show');
@@ -123,7 +123,7 @@
 
             });
         @endif
-    </script>
+    </script> --}}
     <!-- Auto-open modal on validation error -->
 
 

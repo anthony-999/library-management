@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Library Management | ACV',
+    'title' => 'Book Haven | ACV',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,9 +63,9 @@ return [
     |
     */
 
-    'logo' => '<b>Library Management</b>',
-    'logo_img' => '',
-    'logo_img_class' => '',
+    'logo' => '<b>Book Haven</b>',
+  'logo_img' => 'logo/book_logo.png', // path relative to public/
+'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,
     'logo_img_xl_class' => '',
     'logo_img_alt' => '',
@@ -199,9 +199,9 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-dark navbar-light',
+    'classes_topnav' => 'navbar-light navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 

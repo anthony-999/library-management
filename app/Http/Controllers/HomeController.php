@@ -97,7 +97,7 @@ class HomeController extends Controller
 
             ]);
         } elseif (Auth::user()->role == 'user') {
-            return view('user.welcome'); // make sure this view exists
+            return  redirect()->intended('/'); // make sure this view exists
         } else {
             abort(403, 'Unauthorized'); // optional
         }

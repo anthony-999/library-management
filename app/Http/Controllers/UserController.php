@@ -37,8 +37,8 @@ class UserController extends Controller
         // validate input
         $validated = $request->validate([
             'name' => 'required',
-            'student_number' => 'unique:users,student_number',
-            'email' => 'email|unique:users,email',
+            // 'student_number' => 'unique:users,student_number',
+            // 'email' => 'email|unique:users,email',
             // 'password' => 'min:6',
             'password_confirmation' => 'same:password',
             'role' => 'required',        
