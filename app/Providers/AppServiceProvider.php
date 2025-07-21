@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
             Paginator::useBootstrap(); // ✅ Use Bootstrap 4-compatible pagination
+            
 
     }
 }

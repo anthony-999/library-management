@@ -6,8 +6,10 @@ use App\Models\Book;
 use App\Models\Category;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
 
+#[Title('Book Haven')] 
 class LandingPage extends Component
 {
     public function render()
