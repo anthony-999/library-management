@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\DB; // Make sure to import this at the top
+use Illuminate\Notifications\Notifiable;
 
 
 class HomeController extends Controller
 {
+     use Notifiable;
+
     /**
      * Create a new controller instance.
      *
@@ -83,7 +86,9 @@ class HomeController extends Controller
         }
 
         if (Auth::user()->role == 'admin') {
+             $user = Auth::user();
             return view('admin.dashboard', [
+    
                   'users' => User::all(),
                 'categories' => Category::all(),
                 'books' => Book::all(),

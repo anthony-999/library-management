@@ -12,7 +12,12 @@
         </thead>
         <tbody>
             @php $row = 1; @endphp
-            @foreach ($borrowedGroups as $createdAt => $group)
+            @if ($borrowedGroups->isEmpty())
+        <tr>
+            <td colspan="6" class="text-center text-danger">No borrowed records found.</td>
+        </tr>
+                        @else
+                        @foreach ($borrowedGroups as $createdAt => $group)
                 <tr>
                     <td>{{ $row++ }}</td>
                     <td>
@@ -33,6 +38,9 @@
                     </td>
                 </tr>
             @endforeach
+
+            @endif
+            
         </tbody>
     </table>
 </div>

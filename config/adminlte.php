@@ -64,8 +64,8 @@ return [
     */
 
     'logo' => '<b>Book Haven</b>',
-  'logo_img' => 'logo/book_logo.png', // path relative to public/
-'logo_img_class' => 'brand-image',
+    'logo_img' => '', // path relative to public/
+    'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,
     'logo_img_xl_class' => '',
     'logo_img_alt' => '',
@@ -119,8 +119,7 @@ return [
             'width' => 60,
             'height' => 60,
         ],
-    ]
-    ,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +140,7 @@ return [
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
 
-    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -302,63 +301,70 @@ return [
     */
 
     'menu' => [
-        [
-    'type' => 'navbar-notification',
-    'id' => 'my-notification',                // An ID attribute (required).
-    'icon' => 'fas fa-bell',                  // A font awesome icon (required).
-    'icon_color' => 'warning',                // The initial icon color (optional).
-    'label' => 0,                             // The initial label for the badge (optional).
-    'label_color' => 'danger',                // The initial badge color (optional).
-    'url' => '',            // The url to access all notifications/elements (required).
-    'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
-    'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
-    'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
-    'update_cfg' => [
-        'url' => 'notifications/get',         // The url to periodically fetch new data (optional).
-        'period' => 30,                       // The update period for get new data (in seconds, optional).
-    ],
-],
+    //     [
+    //         'type' => 'navbar-notification',
+    // 'id' => 'my-notification',
+    // 'icon' => 'fas fa-bell',
+    // 'icon_color' => 'warning',
+    // 'label' => 0,
+    // 'label_color' => 'danger',
+    // 'url' => 'notifications/get', // important: JSON endpoint
+    // 'topnav_right' => true,
+    // 'dropdown_mode' => true,
+    // 'dropdown_flabel' => 'All notifications',
+    // 'update_cfg' => [
+    //     'url' => 'notifications/get',
+    //     'period' => 30, // refresh every 30s
+    // ],
+    //     ],
 
-       
-      
+
+
         [
             'text' => 'Dashboard',
             'url' => '/home',
             'icon' => 'fas fa-home',
-         
-          
+
+
         ],
-         [
-            'text' => 'Category',
+        [
+            'text' => 'Genre',
             'url' => 'categories',
             'icon' => 'fas fa-list',
-      
-         
-          
+
+
+
         ],
         [
             'text' => 'Books',
             'url' => 'books',
             'icon' => 'fas fa-book',
-         
-          
+
+
         ],
-         [
+        [
             'text' => 'Borrowed',
             'url' => 'borrowed',
-            'icon' => 'fas fa-book',
-         
-          
+            'icon' => 'fas fa-handshake',
+
+
         ],
-       
-         [
+
+        [
             'text' => 'Users',
             'url' => 'users',
             'icon' => 'fas fa-users',
-         
-          
+
+
         ],
-        
+         [
+            'text' => 'Reports',
+            'url' => 'reports',
+            'icon' => 'fas fa-file',
+
+
+        ],
+
     ],
 
     /*
@@ -515,5 +521,5 @@ return [
 
     'livewire' => true,
 
-    
+
 ];

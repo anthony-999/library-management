@@ -2,17 +2,25 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Book;
 use App\Models\Borrowed;
-use Illuminate\Support\Facades\Session;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Notifications\BookBorrowed;
 use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Component;
+use Illuminate\Support\Facades\Notification;
+use App\Models\User; // or Admin model
+
+
+
+
+use Illuminate\Notifications\Notifiable;
 
 
 
 class BorrowCart extends Component
 {
+    use Notifiable;
 
     public $cartBooks = [];
 
@@ -48,10 +56,17 @@ class BorrowCart extends Component
     {
 
         $cart = session()->get('borrow_cart', []);
-         $user = Auth::user();
-         foreach($cart as $bookId){
+
+        $user = Auth::user();
+
+
+        // Get all admin users (in case there are multiple)
+        $admins = User::where('role', 'admin')->get();
+
+
+        foreach ($cart as $bookId) {
             Borrowed::create([
-               'book_id'      => $bookId,
+                'book_id'      => $bookId,
                 'user_id'      => $user->id,
                 'borrow_date'  => now(),
                 'due_date'     => now()->addDay(7),
@@ -59,18 +74,21 @@ class BorrowCart extends Component
             ]);
 
             $book = Book::find($bookId);
-            if($book){
+            if ($book) {
                 $book->is_available = 0;
                 $book->save();
+                
+                foreach ($admins as $admin) {
+                $admin->notify(new BookBorrowed($book, $user)); // <-- include user info if needed
+                }
             }
-            
-         }
+        }
 
-             session()->forget('borrow_cart');
-                 $this->cartBooks = [];
+        session()->forget('borrow_cart');
+        $this->cartBooks = [];
 
-                 return redirect()->route('landing')->with('success', 'Books successfully borrowed!');
-                    //  session()->flash('success', 'Books successfully borrowed!');
+        return redirect()->route('landing')->with('success', 'Books successfully borrowed!');
+        //  session()->flash('success', 'Books successfully borrowed!');
 
 
 

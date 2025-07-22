@@ -1,52 +1,42 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowedController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Livewire\BookBorrow;
 use App\Livewire\BorrowCart;
 use App\Livewire\BorrowedList;
 use App\Livewire\LandingPage;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-
-
-
-
-
+// Public Routes
 Route::get('/', LandingPage::class)->name('landing');
-
 Route::get('/view/{book}', BookBorrow::class)->name('view.book');
 
-Route::get('/borrow-cart', BorrowCart::class)->name('borrow.cart');
-Route::get('/borrow-list', BorrowedList::class)->name('borrow.list');
 
-  
-// Route::post('/cart/add/{book}', function ($bookId) {
-//     $cart = session()->get('borrow_cart', []);
-//     if (!in_array($bookId, $cart)) {
-//         $cart[] = $bookId;
-//         session()->put('borrow_cart', $cart);
-//     }
-//     return back()->with('success', 'Book added to cart.');
-// })->name('cart.add');
-
-
-
+// Auth routes with email verification
 Auth::routes(['verify' => true]);
 
+// Protected Routes
 Route::middleware(['auth', 'verified'])->group(function () {
-  Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
-  Route::resource('categories', CategoryController::class);
-  Route::resource('books', BookController::class);
-  Route::resource('borrowed', BorrowedController::class);
-  Route::resource('users', UserController::class);
-  Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
+    // Dashboard
+    Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
 
+    // Resource Controllers
+    Route::resource('categories', CategoryController::class);
+    Route::resource('books', BookController::class);
+    Route::resource('borrowed', BorrowedController::class);
+    Route::resource('users', UserController::class);
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
+    Route::get('/borrow-cart', BorrowCart::class)->name('borrow.cart');
+    Route::get('/borrow-list', BorrowedList::class)->name('borrow.list');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
 });

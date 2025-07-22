@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container mt-5 p-5">
     <h2>Your Borrow Cart</h2>
 
      @if (session()->has('success'))

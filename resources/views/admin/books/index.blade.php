@@ -39,16 +39,19 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $count =1;
+                    @endphp
                     @foreach ($books as $book)
                         <tr>
-                            <td>{{ $book->id }}</td>
+                            <td>{{ $count++ }}</td>
                             {{-- <td>{{ $book->category->name }}</td> --}}
                             {{-- <td>
                                 <img src="{{ asset('storage/' . $book->cover_page) }}" alt="Cover Page" width="30"
                                     class="rounded">
                             </td> --}}
                             {{-- <td>{{ $book->name }}</td> --}}
-                            <td>{{ $book->author }}</td>
+                            <td>{{ $book->name }}</td>
                             {{-- <td>{{ $book->isbn }}</td> --}}
                             <td>{{ $book->published_year }}</td>
                             <td>{{ $book->is_available == 1 ? 'Available' : 'Not Available' }}</td>
